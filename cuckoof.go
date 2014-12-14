@@ -19,6 +19,7 @@ import (
 
 // CF is a cuckoo filter
 type CF struct {
+	// TODO(dgryski): add larger fingerprints
 	t        [][4]byte
 	occupied []byte
 	rnd      uint64
@@ -163,6 +164,7 @@ func (cf *CF) setOccupied(row uint32, idx byte, f byte) {
 	cf.occupied[row/2] |= (1 << idx) << (uint(t) * 4)
 }
 
+// freebits indicates the offset of the first 0 bit in the nybble
 var freebits = [16]byte{
 	0, // 0000
 	1, // 0001
