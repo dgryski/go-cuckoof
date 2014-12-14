@@ -24,8 +24,13 @@ type CF struct {
 	rnd      uint64
 }
 
-// New returns a new cuckoo filter with size hash table entries.
+// New returns a new cuckoo filter with size hash table entries.  Size must be a power of two
 func New(size int) *CF {
+
+	if size&(size-1) != 0 {
+		panic("cuckoof: size must be a power of two")
+	}
+
 	return &CF{
 		t:        make([][4]byte, size),
 		occupied: make([]byte, size/2),
