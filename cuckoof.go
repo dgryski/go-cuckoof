@@ -112,6 +112,7 @@ func (cf *CF) Delete(x []byte) bool {
 	return cf.delFP(i2, f)
 }
 
+// evict sets f in row and returns the evicted element
 func (cf *CF) evict(row uint32, f byte) byte {
 	cf.rnd = rnd(cf.rnd)
 
@@ -123,6 +124,7 @@ func (cf *CF) evict(row uint32, f byte) byte {
 	return e
 }
 
+// hasFP searches the row for the given fingerprint
 func (cf *CF) hasFP(row uint32, f byte) bool {
 	b := cf.occupied[row/2]
 	t := row & 1
@@ -135,6 +137,7 @@ func (cf *CF) hasFP(row uint32, f byte) bool {
 		b&0x08 == 0x08 && cf.t[row][3] == f
 }
 
+// delFP deletes a fingerprint from a given row, and returns if it was successful
 func (cf *CF) delFP(row uint32, f byte) bool {
 	b := cf.occupied[row/2]
 	t := row & 1
@@ -158,6 +161,7 @@ func (cf *CF) delFP(row uint32, f byte) bool {
 	return false
 }
 
+// setOccupied puts the fingerprint at the given row/index and marks the slot as occupied
 func (cf *CF) setOccupied(row uint32, idx byte, f byte) {
 	t := row & 1
 	cf.t[row][idx] = f
@@ -184,6 +188,7 @@ var freebits = [16]byte{
 	0, // 1111
 }
 
+// hasSpace returns the index of a free entry in 'row' and a bool indicating if it was found
 func (cf *CF) hasSpace(row uint32) (byte, bool) {
 	b := cf.occupied[row/2]
 	t := row & 1
@@ -200,7 +205,7 @@ func rnd(x uint64) uint64 {
 	return x
 }
 
-// hash a fingerprint with 2 rounds of an xorshift-mult rng
+// hashfp hashes a fingerprint with 2 rounds of an xorshift-mult rng
 func hashfp(b byte) uint32 {
 	x := rnd(rnd(uint64(b)))
 	return uint32(x) ^ uint32(x>>32)
