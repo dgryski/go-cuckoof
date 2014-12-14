@@ -32,6 +32,8 @@ func New(size int) *CF {
 		panic("cuckoof: size must be a power of two")
 	}
 
+	// TODO(dgryski): size is a power of two, all `%len(t)` should become bitmasks instead
+
 	return &CF{
 		t:        make([][4]byte, size),
 		occupied: make([]byte, size/2),
@@ -195,6 +197,8 @@ func (cf *CF) hasSpace(row uint32) (byte, bool) {
 	b = (b >> (uint(t) * 4)) & 0xF
 	return freebits[b], b != 0xF
 }
+
+// TODO(dgryski): make rnd a type that can respond with 1-4 *bits*
 
 // rnd is an xorshift/multiple random number generator
 func rnd(x uint64) uint64 {
