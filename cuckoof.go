@@ -14,7 +14,7 @@ package cuckoof
 import (
 	"math/rand"
 
-	"github.com/dchest/siphash"
+	"github.com/dgryski/go-sip13"
 )
 
 // CF is a cuckoo filter
@@ -44,7 +44,7 @@ func New(size int) *CF {
 // Insert adds an element to the filter and returns if the insertion was successful.
 func (cf *CF) Insert(x []byte) bool {
 
-	h := siphash.Hash(0, 0, x)
+	h := sip13.Sum64(0, 0, x)
 
 	i1 := uint32(h) % uint32(len(cf.t))
 
@@ -82,7 +82,7 @@ func (cf *CF) Insert(x []byte) bool {
 
 // Lookup queries the cuckoo filter for an item
 func (cf *CF) Lookup(x []byte) bool {
-	h := siphash.Hash(0, 0, x)
+	h := sip13.Sum64(0, 0, x)
 
 	i1 := uint32(h) % uint32(len(cf.t))
 
@@ -99,7 +99,7 @@ func (cf *CF) Lookup(x []byte) bool {
 
 // Delete removes an item from the cuckoo filter
 func (cf *CF) Delete(x []byte) bool {
-	h := siphash.Hash(0, 0, x)
+	h := sip13.Sum64(0, 0, x)
 
 	i1 := uint32(h) % uint32(len(cf.t))
 
