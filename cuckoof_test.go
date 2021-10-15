@@ -53,7 +53,7 @@ func TestBasicUint32(t *testing.T) {
 			// false negatives rate is r.failes. Some of those are masked because of false positives.
 			effectiveLoad := lf * (1 - r.fails)
 			estimatedFalseNegatives := r.fails * (1 - r.falsePositives)
-			what := fmt.Sprintf("size: %d(2^%d) load factor: %.02f%% effective load: %0.3f %#v efn: %f delta: %f", size, p, lf, effectiveLoad, r, estimatedFalseNegatives, estimatedFalseNegatives-r.falseNegatives)
+			what := fmt.Sprintf("size: %d(2^%d) load factor: %.02f%% effective load: %0.3f (%f/%f/%f) efn: %f delta: %f", size, p, lf, effectiveLoad, r.fails, r.falsePositives, r.falseNegatives, estimatedFalseNegatives, estimatedFalseNegatives-r.falseNegatives)
 			if lf < 0.96 {
 				if r.fails != 0 || r.falseNegatives != 0 {
 					t.Errorf("Expected failed==0 && falseNegatives==0 --- %s", what)
